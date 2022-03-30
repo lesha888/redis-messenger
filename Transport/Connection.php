@@ -469,7 +469,7 @@ class Connection
                     }
                 }
 
-                $added = $this->rawCommand('ZADD', $uniqId === null ? '' : 'NX', $now[1].$now[0], $message);
+                $added = $this->rawCommand('ZADD', $uniqId === null ? 'NX' : '', $now[1].$now[0], $message);
             } else {
                 $message = json_encode([
                     'body' => $body,
