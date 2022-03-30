@@ -468,8 +468,11 @@ class Connection
                         throw new TransportException("Message delay is too big: {$delayInMs}ms.");
                     }
                 }
-
-                $added = $this->rawCommand('ZADD', $uniqId === null ? 'NX' : '', $now[1].$now[0], $message);
+                if($uniqId === null){
+                    $added = $this->rawCommand('ZADD', 'NX', $now[1].$now[0], $message);
+                }else{
+                    $added = $this->rawCommand('ZADD', $now[1].$now[0], $message);
+                }
             } else {
                 $message = json_encode([
                     'body' => $body,
