@@ -46,7 +46,7 @@ class RedisSender implements SenderInterface
         if ($uniqueDelayedStamp) {
             $delayInMs = $uniqueDelayedStamp->getDelay();
             $uniqId = '';
-            $envelope->withoutStampsOfType(UniqueDelayedStamp::class);
+            $envelope = $envelope->withoutStampsOfType(UniqueDelayedStamp::class);
         } else {
             $uniqId = null;
         }
