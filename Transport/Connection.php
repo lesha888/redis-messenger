@@ -439,7 +439,7 @@ class Connection
         }
     }
 
-    public function add(string $body, array $headers, int $delayInMs = 0): void
+    public function add(string $body, array $headers, int $delayInMs = 0, $uniqId = null): void
     {
         if ($this->autoSetup) {
             $this->setup();
@@ -451,7 +451,7 @@ class Connection
                     'body' => $body,
                     'headers' => $headers,
                     // Entry need to be unique in the sorted set else it would only be added once to the delayed messages queue
-                    'uniqid' => uniqid('', true),
+                    'uniqid' => $uniqId ?? uniqid('', true),
                 ]);
 
                 if (false === $message) {
