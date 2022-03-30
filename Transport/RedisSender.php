@@ -37,7 +37,6 @@ class RedisSender implements SenderInterface
      */
     public function send(Envelope $envelope): Envelope
     {
-        $encodedMessage = $this->serializer->encode($envelope);
 
         /** @var DelayStamp|null $delayStamp */
         $delayStamp = $envelope->last(DelayStamp::class);
@@ -47,9 +46,13 @@ class RedisSender implements SenderInterface
         if ($uniqueDelayedStamp) {
             $delayInMs = $uniqueDelayedStamp->getDelay();
             $uniqId = '';
+            $envelope->withoutStampsOfType(UniqueDelayedStamp::class);
         } else {
             $uniqId = null;
         }
+
+        $encodedMessage = $this->serializer->encode($envelope);
+
 
         $this->connection->add($encodedMessage['body'], $encodedMessage['headers'] ?? [], $delayInMs, $uniqId);
 
